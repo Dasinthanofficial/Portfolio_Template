@@ -1,69 +1,35 @@
 import React, { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
 
 const SpotlightCard = ({ children, className = "" }) => {
     const divRef = useRef(null);
-    const [isFocused, setIsFocused] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [opacity, setOpacity] = useState(0);
 
     const handleMouseMove = (e) => {
         if (!divRef.current) return;
-
         const div = divRef.current;
         const rect = div.getBoundingClientRect();
-
         setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
     };
 
-    const handleFocus = () => {
-        setIsFocused(true);
-        setOpacity(1);
-    };
-
-    const handleBlur = () => {
-        setIsFocused(false);
-        setOpacity(0);
-    };
-
-    const handleMouseEnter = () => {
-        setOpacity(1);
-    };
-
-    const handleMouseLeave = () => {
-        setOpacity(0);
-    };
+    const handleMouseEnter = () => setOpacity(1);
+    const handleMouseLeave = () => setOpacity(0);
 
     return (
         <div
             ref={divRef}
             onMouseMove={handleMouseMove}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className={`relative rounded-xl overflow-hidden border border-white/10 bg-space-black/50 ${className}`}
+            className={`relative rounded-2xl border border-white/10 bg-[#080810] overflow-hidden ${className}`}
         >
             <div
                 className="pointer-events-none absolute -inset-px opacity-0 transition duration-300"
                 style={{
                     opacity,
-                    background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(138,43,226,0.15), transparent 40%)`,
+                    background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(181,123,255,0.1), transparent 40%)`,
                 }}
             />
-
-            {/* Border Glow */}
-            <div
-                className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition duration-300"
-                style={{
-                    opacity,
-                    background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(176,11,105,0.4), transparent 40%)`,
-                }}
-            // This second div acts as a border mask if we clip it, but simple overlay is often enough. 
-            // For distinct border glow, we can wrap content with padding or use mask-image.
-            // Let's stick to a subtle overlay glow for now to be safe and simple.
-            />
-
             <div className="relative h-full">
                 {children}
             </div>
